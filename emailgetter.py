@@ -18,16 +18,20 @@ h.ignore_links = True
 
 
 emails = []
+count = 0
 for num in selected_mails[0].split():
     _, data = mail.fetch(num , '(RFC822)')
     _, bytes_data = data[0]
+    count += 1
+    if count % 20 == 0: 
+        print(count)
 
     email_message = email.message_from_bytes(bytes_data)
     data = {}
     data["subject"] = email_message["subject"]
     data["to"] = email_message["to"]
     data["from"] = email_message["from"]
-    if data["from"] == user:
+    if user in data["from"]:
         continue
     data["date"] = email_message["date"]
 
@@ -43,13 +47,12 @@ for num in selected_mails[0].split():
             if part.get_content_type()=="text/html":
                 s = h.handle(s)
             data["body"] = " ".join(s.split())
-            if num % 20 == 0: print(num)
             break
     data["status"] = ""
     data["company"] = ""
     emails.append(data)
 
-with open('emaildata.csv', 'w', encoding='UTF8') as f:
+with open('AlikEmailData.csv', 'w', encoding='UTF8') as f:
     header = ['subject', 'to', 'from', 'date', 'body', "status", "company"]
     writer = csv.writer(f)
     writer.writerow(header)
