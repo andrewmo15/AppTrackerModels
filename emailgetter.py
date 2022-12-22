@@ -2,8 +2,10 @@ import imaplib
 import email
 import csv
  
-user = 'emailtracker404@gmail.com'
-password = 'wataetfrwhhkjgho'
+# user = 'aliksemelianov@gmail.com'
+# password = 'xqjybjodcaqktkcl'
+user = 'andrewmoasdf@gmail.com'
+password = 'rwkixnairelyitli'
 imap_url = 'imap.gmail.com'
 
 mail = imaplib.IMAP4_SSL(imap_url)
