@@ -1,6 +1,7 @@
 import imaplib
 import email
 import csv
+import html2text
  
 # user = 'aliksemelianov@gmail.com'
 # password = 'xqjybjodcaqktkcl'
@@ -11,6 +12,9 @@ mail = imaplib.IMAP4_SSL(imap_url)
 mail.login(user, password)
 mail.select('Inbox')
 _, selected_mails = mail.search(None, 'ALL')
+
+h = html2text.HTML2Text()
+h.ignore_links = True
 
 
 emails = []
@@ -32,10 +36,12 @@ for num in selected_mails[0].split():
             message = part.get_payload(decode=True)
             try:
                 s = message.decode()
-                data["body"] = " ".join(s.split())
             except:
                 s = message.decode("cp1252")
-                data["body"] = " ".join(s.split())
+            if part.get_content_type()=="text/html":
+                s = h.handle(s)
+            data["body"] = " ".join(s.split())
+            if num % 20 == 0: print(num)
             break
     data["status"] = ""
     data["company"] = ""
