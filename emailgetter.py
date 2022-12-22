@@ -16,15 +16,10 @@ _, selected_mails = mail.search(None, 'ALL')
 h = html2text.HTML2Text()
 h.ignore_links = True
 
-
 emails = []
-count = 0
 for num in selected_mails[0].split():
     _, data = mail.fetch(num , '(RFC822)')
     _, bytes_data = data[0]
-    count += 1
-    if count % 20 == 0: 
-        print(count)
 
     email_message = email.message_from_bytes(bytes_data)
     data = {}
@@ -34,9 +29,8 @@ for num in selected_mails[0].split():
     if user in data["from"]:
         continue
     data["date"] = email_message["date"]
-
     data["body"] = ""
-    
+
     for part in email_message.walk():
         if part.get_content_type()=="text/plain" or part.get_content_type()=="text/html":
             message = part.get_payload(decode=True)
@@ -48,11 +42,15 @@ for num in selected_mails[0].split():
                 s = h.handle(s)
             data["body"] = " ".join(s.split())
             break
+
+    if data["subject"] == "" or data["to"] == "" or data["from"] == "" or data["date"] == "":
+        continue
+    
     data["status"] = ""
     data["company"] = ""
     emails.append(data)
 
-with open('AlikEmailData.csv', 'w', encoding='UTF8') as f:
+with open('emaildata.csv', 'w', encoding='UTF8') as f:
     header = ['subject', 'to', 'from', 'date', 'body', "status", "company"]
     writer = csv.writer(f)
     writer.writerow(header)
