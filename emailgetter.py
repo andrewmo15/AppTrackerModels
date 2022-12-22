@@ -7,7 +7,6 @@ import csv
 user = 'andrewmoasdf@gmail.com'
 password = 'rwkixnairelyitli'
 imap_url = 'imap.gmail.com'
-
 mail = imaplib.IMAP4_SSL(imap_url)
 mail.login(user, password)
 mail.select('Inbox')
@@ -27,10 +26,16 @@ for num in selected_mails[0].split():
     data["date"] = email_message["date"]
 
     data["body"] = ""
+    
     for part in email_message.walk():
         if part.get_content_type()=="text/plain" or part.get_content_type()=="text/html":
             message = part.get_payload(decode=True)
-            data["body"] += message.decode()
+            try:
+                s = message.decode()
+                data["body"] = " ".join(s.split())
+            except:
+                s = message.decode("cp1252")
+                data["body"] = " ".join(s.split())
             break
     data["status"] = ""
     data["company"] = ""
