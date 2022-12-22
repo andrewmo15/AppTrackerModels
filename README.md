@@ -7,3 +7,7 @@
 4. Create backend using django
 5. Create frontend using react native
 6. Use RESTAPI for endpoints
+
+
+## IMAP Password: 
+wataetfrwhhkjgho

@@ -2,10 +2,10 @@ import imaplib
 import email
 import csv
  
-user = 'emailtracker404@gmail.com'
-password = 'wataetfrwhhkjgho'
+user = 'andrewmoasdf@gmail.com'
+password = 'rwkixnairelyitli'
 imap_url = 'imap.gmail.com'
-
+#wataetfrwhhkjgho
 mail = imaplib.IMAP4_SSL(imap_url)
 mail.login(user, password)
 mail.select('Inbox')
@@ -25,10 +25,15 @@ for num in selected_mails[0].split():
     data["date"] = email_message["date"]
 
     data["body"] = ""
+    
     for part in email_message.walk():
         if part.get_content_type()=="text/plain" or part.get_content_type()=="text/html":
             message = part.get_payload(decode=True)
-            data["body"] += message.decode()
+            try:
+                data["body"] += message.decode()
+            except:
+                a = 0
+                
             break
     data["status"] = ""
     data["company"] = ""
@@ -39,6 +44,9 @@ with open('emaildata.csv', 'w', encoding='UTF8') as f:
     writer = csv.writer(f)
     writer.writerow(header)
     for emaildata in emails:
+        if "ticketmaster" in emaildata["body"]:
+            print("=======================================")
+            print(emaildata)
         temp = []
         for heading in header:
             temp.append(emaildata[heading])
