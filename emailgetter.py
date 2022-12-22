@@ -17,20 +17,22 @@ h = html2text.HTML2Text()
 h.ignore_links = True
 
 emails = []
+counter = 0
 for num in selected_mails[0].split():
     _, data = mail.fetch(num , '(RFC822)')
     _, bytes_data = data[0]
-
+    counter += 1
+    if counter % 20 == 0: print(counter)
     email_message = email.message_from_bytes(bytes_data)
     data = {}
     data["subject"] = email_message["subject"]
     data["to"] = email_message["to"]
     data["from"] = email_message["from"]
-    if user in data["from"]:
-        continue
     data["date"] = email_message["date"]
-    data["body"] = ""
+    if data["subject"] == "" or data["to"] == "" or data["from"] == "" or data["date"] == "" or user in data["from"]:
+        continue
 
+    data["body"] = ""
     for part in email_message.walk():
         if part.get_content_type()=="text/plain" or part.get_content_type()=="text/html":
             message = part.get_payload(decode=True)
@@ -42,8 +44,7 @@ for num in selected_mails[0].split():
                 s = h.handle(s)
             data["body"] = " ".join(s.split())
             break
-
-    if data["subject"] == "" or data["to"] == "" or data["from"] == "" or data["date"] == "":
+    if data["body"]=="":
         continue
     
     data["status"] = ""
