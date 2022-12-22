@@ -30,10 +30,11 @@ for num in selected_mails[0].split():
         if part.get_content_type()=="text/plain" or part.get_content_type()=="text/html":
             message = part.get_payload(decode=True)
             try:
-                data["body"] += message.decode()
+                s = message.decode()
+                data["body"] = " ".join(s.split())
             except:
-                a = 0
-                
+                s = message.decode("cp1252")
+                data["body"] = " ".join(s.split())
             break
     data["status"] = ""
     data["company"] = ""
@@ -44,9 +45,6 @@ with open('emaildata.csv', 'w', encoding='UTF8') as f:
     writer = csv.writer(f)
     writer.writerow(header)
     for emaildata in emails:
-        if "ticketmaster" in emaildata["body"]:
-            print("=======================================")
-            print(emaildata)
         temp = []
         for heading in header:
             temp.append(emaildata[heading])
