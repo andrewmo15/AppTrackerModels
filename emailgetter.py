@@ -27,6 +27,8 @@ for num in selected_mails[0].split():
     data["subject"] = email_message["subject"]
     data["to"] = email_message["to"]
     data["from"] = email_message["from"]
+    if data["from"] == user:
+        continue
     data["date"] = email_message["date"]
 
     data["body"] = ""
