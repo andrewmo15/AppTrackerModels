@@ -1,7 +1,10 @@
 import imaplib
 import email
 import csv
-import html2text
+# import html2text
+# SWTICHED TO BEAUTIFUL SOUP
+from bs4 import BeautifulSoup
+
  
 # user = 'aliksemelianov@gmail.com'
 # password = 'xqjybjodcaqktkcl'
@@ -13,8 +16,19 @@ mail.login(user, password)
 mail.select('Inbox')
 _, selected_mails = mail.search(None, 'ALL')
 
-h = html2text.HTML2Text()
-h.ignore_links = True
+def getTextFromHTML(html):
+    soup = BeautifulSoup(html, features="html.parser")
+    # rip out all scripts and style elements
+    for script in soup(["script", "style"]):
+        script.extract()    
+    text = soup.get_text()
+    # break into lines and remove leading and trailing space on each
+    lines = (line.strip() for line in text.splitlines())
+    # break multi-headlines into a line each
+    chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
+    # drop blank lines
+    text = '\n'.join(chunk for chunk in chunks if chunk)
+    return text
 
 emails = []
 counter = 0
@@ -37,12 +51,12 @@ for num in selected_mails[0].split():
         if part.get_content_type()=="text/plain" or part.get_content_type()=="text/html":
             message = part.get_payload(decode=True)
             try:
-                s = message.decode()
+                text = message.decode()
             except:
-                s = message.decode("cp1252")
+                text = message.decode("cp1252")
             if part.get_content_type()=="text/html":
-                s = h.handle(s)
-            data["body"] = " ".join(s.split())
+                text = getTextFromHTML(text)
+            data["body"] = " ".join(text.split())
             break
     if data["body"]=="":
         continue
