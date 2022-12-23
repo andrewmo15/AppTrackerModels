@@ -11,3 +11,13 @@
 
 ## IMAP Password: 
 wataetfrwhhkjgho
+
+ENUMS:
+SUBMITTED
+INPROGRESS
+OFFERED
+REJECTED
+
+FLAGS:
+TEST
+SCHEDULE
