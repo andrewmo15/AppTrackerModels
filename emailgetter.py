@@ -3,6 +3,7 @@ import email
 from email.header import decode_header, make_header
 import csv
 from bs4 import BeautifulSoup
+import re
 
 def getTextFromHTML(html):
     soup = BeautifulSoup(html, features="html.parser")
@@ -18,6 +19,23 @@ def getTextFromHTML(html):
     text = '\n'.join(chunk for chunk in chunks if chunk)
     return text
 
+def cleanText(text, isHTML=False):
+    # remove whitespace
+    text = " ".join(text.split())
+    # convert HTML to plain text
+    if isHTML:
+        text = getTextFromHTML(text)
+    # remove links
+    nolinks = re.sub(r'http\S+', '', text)
+    # remove characters to prevent cell overflow
+    return nolinks[:32760]
+
+def hasEmptyParameters(email):
+    try:
+        return email["subject"] == "" or email["to"] == "" or email["from"] == "" or email["date"] == "" or email["subject"] == None or email["to"] == None or email["from"] == None or email["date"] == None
+    except:
+        return False
+
 def getEmails(user, password, imap_url):
     mail = imaplib.IMAP4_SSL(imap_url)
     mail.login(user, password)
@@ -31,14 +49,17 @@ def getEmails(user, password, imap_url):
         _, data = mail.fetch(num , '(RFC822)')
         _, bytes_data = data[0]
         email_message = email.message_from_bytes(bytes_data)
-        data = {}
-        data["subject"] = str(make_header(decode_header(email_message["subject"])))
-        data["to"] = str(make_header(decode_header(email_message["to"])))
-        data["from"] = str(make_header(decode_header(email_message["from"])))
-        data["date"] = str(make_header(decode_header(email_message["date"])))
-        if data["subject"] == "" or data["to"] == "" or data["from"] == "" or data["date"] == "" or user in data["from"]:
+        if hasEmptyParameters(email_message) or user in email_message["from"]:
             continue
-
+        subject = str(make_header(decode_header(email_message["subject"])))
+        to = str(make_header(decode_header(email_message["to"])))
+        sender = str(make_header(decode_header(email_message["from"])))
+        date = str(make_header(decode_header(email_message["date"])))
+        data = {}
+        data["subject"] = cleanText(subject)
+        data["to"] = cleanText(to)
+        data["from"] = cleanText(sender)
+        data["date"] = cleanText(date)
         data["body"] = ""
         for part in email_message.walk():
             if part.get_content_type()=="text/plain" or part.get_content_type()=="text/html":
@@ -48,21 +69,14 @@ def getEmails(user, password, imap_url):
                     text = message.decode('utf-8', 'ignore')
                 except:
                     text = message.decode("cp1252", 'ignore')
-                # convert HTML to plain text
-                if part.get_content_type()=="text/html":
-                    text = getTextFromHTML(text)
-                # remove links
-                words = text.split()
-                for i, word in enumerate(words):
-                    if "http" in word: del words[i]
-                data["body"] = " ".join(words)
+                data["body"] = cleanText(text, part.get_content_type()=="text/html")
                 break
-        if data["body"]=="":
+        if data["body"] == "" or data["body"] == None:
             continue
-        
         data["status"] = ""
         data["company"] = ""
         emails.append(data)
+
     return emails
 
 def createCSVDataset(filename, emails):
@@ -76,8 +90,10 @@ def createCSVDataset(filename, emails):
                 temp.append(emaildata[heading])
             writer.writerow(temp)
 
+# user = 'aliksemelianov@gmail.com'
+# password = 'xqjybjodcaqktkcl'
 user = 'andrewmoasdf@gmail.com'
 password = 'rwkixnairelyitli'
 imap_url = 'imap.gmail.com'
 emails = getEmails(user, password, imap_url)
-createCSVDataset("emaildata.csv", emails)
+createCSVDataset("emails.csv", emails)
