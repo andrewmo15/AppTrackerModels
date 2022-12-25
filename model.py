@@ -1,29 +1,29 @@
 import pandas as pd
+import torch
+from tqdm.notebook import tqdm
+from transformers import BertTokenizer, BertForSequenceClassification
+from torch.utils.data import TensorDataset
+from sklearn.model_selection import train_test_split
 
 # read in data
 df = pd.read_csv("data generation/data.csv")
 
 # drop irrelevant features
-unrelevant_features = ["company"]
-relevant_features = ["from", "subject", "body"]
-df.drop(unrelevant_features,inplace=True,axis=1)
+irrelevant_features = ["company"]
+df.drop(irrelevant_features, inplace=True,axis=1)
 
-# separate dataframe by status
-submitted = df.loc[df["status"] == "SUBMITTED"]
-inprogress = df.loc[df["status"] == "INPROGRESS"]
-rejected = df.loc[df["status"] == "REJECTED"]
-notinterview = df[df["status"].isnull()]
+possible_labels = df.status.unique()
 
-# Convert labels into integers
-#   SUBMITTED = 1
-#   INPROGRESS = 2
-#   REJECTED = 3
-#   NA = 4
-submitted["status"] = 1
-inprogress["status"] = 2
-rejected["status"] = 3
-notinterview["status"] = 4
+label_dict = {}
+for index, possible_label in enumerate(possible_labels):
+    label_dict[possible_label] = index
+df['label'] = df.status.replace(label_dict)
 
-# reconcatenate data
-data = pd.concat([submitted, inprogress, rejected, notinterview],axis=0)
-data.reset_index(inplace=True)
+X_train, X_val, y_train, y_val = train_test_split(df.index.values, df.label.values, test_size=0.15, random_state=42, stratify=df.label.values)
+
+df['data_type'] = ['not_set']*df.shape[0]
+
+df.loc[X_train, 'data_type'] = 'train'
+df.loc[X_val, 'data_type'] = 'val'
+
+print(df.groupby(['status', 'label', 'data_type']).count())
