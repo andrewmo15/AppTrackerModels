@@ -1,0 +1,100 @@
+Subjects:
+Thank you for applying to [*Company]
+Thanks for applying to [*Company]
+Thanks for your interest in [*Company]
+Thanks you for your interest in [*Company]
+Thank you for applying!
+Application acknowledgement
+An update from [*Company]
+An update on your application with [*Company]
+Thank you for your application to [*Company]
+Application for [*Position] at [*Company]
+Confirmation of [*Position] Application at [*Company]
+--------------
+Optional intros:
+Dear [*Candidate],
+Hello,
+Hi [*Candidate],
+[*Candidate],
+Hi,
+Hello [*Candidate],
+--------------
+Introductions:
+Thanks for applying to [*Company]. Your application has been received and we will review it right away.
+You just made our day. Thank you so much for expressing interest in the [*Position] position!
+Thank you for applying to the [*Position] role at [*Company].
+Thank you for your interest in [*Company]!  We've successfully received your application for the following position: [*Position]!
+Thank you for your interest in the [*Position] role at [*Company].
+Thanks for your interest in [*Company]!
+Thank you for your interest in [*Company]!
+Thank you for your interest in [*Company]!
+Thank you for applying to [*Company]. Our hiring team will review your resume soon!
+Thank you for your interest in potential opportunities with [*Company].
+Thanks for applying to [*Company]! Your application for the [*Position] role has been received.
+Thank you for submitting your application for the [*Position] position at [*Company].
+--------------
+Stuffer:
+We appreciate the time and effort you took to submit your application and are excited to review your qualifications.
+We know you have a lot of options when it comes to starting your career, and we appreciate you considering us.
+We appreciate your interest in [*Company] and the [*Position] position
+We appreciate the time and effort you put into your application and are grateful for your interest in joining our team.
+We wanted to let you know we received your application for [*Position], and we are delighted that you would consider joining our team.
+We wanted to let you know we received your application for [*Position], and we are delighted that you would consider joining our team at [*Company].
+We appreciate your interest in joining our team and are grateful for the time and effort you have put into your application.
+--------------
+Body:
+If your application seems like a good fit for the position we will contact you soon.
+If we feel you're a good fit for this role, you can expect to hear back from us in 1-4 weeks. And if you don't hear back this time, we encourage you to re-apply in 3 months.
+We look forward to reviewing your application. Within the next 72 hours, be on the look out for an email regarding your application and potential next steps. In the meantime, please visit our website to learn more about [*Company].
+What happens now? Over the next few weeks, our recruiting team will carefully assess your qualifications for this role, as well as any others that we think might be a good fit. We'll then be in touch if there’s a good match. In the meantime, if you'd like to learn more about [*Company], please visit. Here you'll find lots of information about our people, our culture and our work.
+What happens now? Your resume will be reviewed by the team and we will reach out if your background and skills are a fit for the position.
+We received your application for the [*Position] position and are currently reviewing your candidacy. We'll be in touch with you shortly once we've reviewed everything, but in the meantime we encourage you to keep your candidate profile up-to-date via our careers site
+Our team will review your application and will be in touch if your qualifications match our needs for the role. If you are not selected for this position, keep an eye on our jobs page as we're growing and adding openings. Please note, due to the high volume of applications we receive, we are only able to contact candidates whose qualifications best match our current needs.
+Your details have been added to our database and are under review. Should we feel that your background is a fit for any of our open positions, we will be in touch with additional information.
+We will review it shortly and reach out if there is a fit.
+In the event that we wish to discuss your background further, we will contact you by mail or phone.
+Your application has been received and is currently under review. We will be in touch with you shortly to schedule an interview or provide further updates on the status of your application. In the meantime, please feel free to reach out to us if you have any questions or would like more information about the position or our company.
+Your application will be carefully reviewed by our hiring team, and we will be in touch with you as soon as a decision has been made. In the meantime, if you have any questions about the application process or the position, please do not hesitate to reach out.
+--------------
+Closing:
+Thank you again for your interest.
+Thanks again for your interest!
+Again, thank you for considering [*Company] for your next career opportunity. We hope to hear from you soon.
+--------------
+Finally:
+Best regards, [*Company]
+Best regards, [*Company] Talent team
+Best regards, [*Company] Talent Acquisition Team
+Best regards, [*Recruiter] Recruiter | Careers @ [*Company]
+Best regards, [*Recruiter] Recruiter at [*Company]
+Best regards, [*Recruiter], [*Company]
+Best, [*Company]
+Best, [*Company] Talent team
+Best, [*Company] Talent Acquisition Team
+Best, [*Recruiter] Recruiter | Careers @ [*Company]
+Best, [*Recruiter] Recruiter at [*Company]
+Best, [*Recruiter], [*Company]
+Thank you, [*Company]
+Thank you, [*Company] Talent team
+Thank you, [*Company] Talent Acquisition Team
+Thank you, [*Recruiter] Recruiter | Careers @ [*Company]
+Thank you, [*Recruiter] Recruiter at [*Company]
+Thank you, [*Recruiter], [*Company]
+Thanks, [*Company]
+Thanks, [*Company] Talent team
+Thanks, [*Company] Talent Acquisition Team
+Thanks, [*Recruiter] Recruiter | Careers @ [*Company]
+Thanks, [*Recruiter] Recruiter at [*Company]
+Thanks, [*Recruiter], [*Company]
+Thanks again, [*Company]
+Thanks again, [*Company] Talent team
+Thanks again, [*Company] Talent Acquisition Team
+Thanks again, [*Recruiter] Recruiter | Careers @ [*Company]
+Thanks again, [*Recruiter] Recruiter at [*Company]
+Thanks again, [*Recruiter], [*Company]
+Thanks again and good luck! [*Company]
+Thanks again and good luck! [*Company] Talent team
+Thanks again and good luck! [*Company] Talent Acquisition Team
+Thanks again and good luck! [*Recruiter] Recruiter | Careers @ [*Company]
+Thanks again and good luck! [*Recruiter] Recruiter at [*Company]
+Thanks again and good luck! [*Recruiter], [*Company]

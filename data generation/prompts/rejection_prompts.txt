@@ -1,0 +1,84 @@
+Subjects:
+Rejection for [*Position] Position
+Decision regarding [*Position] position
+Decision regarding your application for the [*Position] position
+[*Position] - [*Company]
+Thank you for your interest in [*Company]
+Thank you for your interest in the [*Position] role at [*Company]
+Update on your job application with [*Company]
+An update from [*Company]
+An update on your application with [*Company]
+Important information about your application to [*Company]
+Thank you for applying to [*Company]
+Thank you for your application to [*Company]
+--------------
+Introductions:
+Dear [*Candidate],
+Hello,
+Hi [*Candidate],
+[*Candidate],
+Hi,
+Hello [*Candidate],
+Good afternoon,
+Good afternoon [*Candidate],
+Good morning [*Candidate],
+Good morning,
+Good evening [*Candidate],
+Good evening,
+--------------
+Body:
+Thank you for applying for the [*Position] at [*Company]. We appreciate the time and effort you put into your application and the opportunity to consider you for this role. After careful consideration, we have decided to move forward with other candidates for this position. While we were impressed by your qualifications and experience, we ultimately felt that another candidate was a better fit for the specific needs of this role. We encourage you to continue to apply for positions that match your skills and interests. We are always on the lookout for talented and motivated professionals, and we hope to have the opportunity to consider you for future opportunities that may arise.
+Thank you for your application and interest in the [*Position] position at [*Company]. After careful consideration, we have decided to pursue other candidates for this role. We appreciate the time and effort you invested in the application process and encourage you to apply for future opportunities at [*Company] that may be a better fit for your skills and experience.
+I hope this message finds you well! I wanted to thank you for your interest in [*Company] and giving us the opportunity to consider you for the [*Position] role. Unfortunately, we are moving forward with other candidates at this point in time. We know there are many options out there, and want you to know we genuinely value your interest in working with us. That said, we would love to stay in touch as we grow. Feel free to connect via LinkedIn, as our company is constantly evolving and there may be a position available for you down the line.
+Thank you for your interest in the [*Position] position at [*Company]. Unfortunately, while your skills and background are impressive, we have recently filled the role for which you applied. We appreciate your time and effort throughout the application process. We encourage you to check back on our Career Site and apply for other positions at [*Company] in the future.   
+Thank you so much for your interest in working with [*Company] and for taking the time to apply for our [*Position] role. We received an overwhelming response to this role which forced us to make some hard decisions. Unfortunately, we won’t be moving forward with your application at this time, however, we'll keep your resume on file for any future roles at [*Company] that may be a good fit for you. As we continue to grow rapidly, I'd like to invite you to keep an eye on our careers page for any new positions. We’re beyond grateful for your time and interest, [*Candidate], and wish you the very best going forward! 
+Thank you for taking the time to apply to the [*Position] role. We’ve enjoyed learning more about you. Unfortunately, we’ve filled the program at this time and are unable to move forward with your application. We have a lot of exciting things happening at [*Company] and hope you’ll explore other opportunities to join our team by visiting our careers website and searching for new roles.
+Thank you for making time to apply to [*Company]. We appreciate that you care about what we're doing. Unfortunately, we have decided not to move forward with your application. Hiring is a deeply imperfect process and one that we sometimes get wrong - we must make hard choices with limited information. Please take this decision in that spirit. We encourage you to keep an eye on [*Company] Careers and follow us on LinkedIn for future opportunities. 
+Thank you for your interest in the position at [*Company]. Unfortunately, we will not be moving forward with your application at this time.
+I hope all is well!  Thanks for your patience here and apologies for the delayed response. I'm emailing to provide you with a status update in regards to your candidacy. I would like to thank you for taking the time to speak with me about the [*Position] opportunity with [*Company]. Unfortunately, at this time, we have decided to not move forward with your candidacy. However, I'd like to keep in touch with you as our hiring plan for 2023 evolves, as we may open roles within the next several months that may be of interest to you. 
+Thank you for applying to the [*Position] role at [*Company]. We appreciate the time you took to apply, and unfortunately have decided not to proceed with your candidacy at this time. Please know that this was not an easy decision as we received many qualified applicants for this position. We really appreciate your interest in our mission to build the future of labor, and wish you the best in your search. Hopefully we’re able to reconnect again sometime in the future!
+Thank you for applying for the [*Position] at [*Company]. We appreciate the time and effort you put into your application and interview. After careful consideration, we have decided to move forward with other candidates who better fit the needs of the position. We apologize for any disappointment this may cause. We encourage you to continue to pursue opportunities with us and apply for positions that align with your skills and experience. Please do not hesitate to reach out to us if you have any questions or would like feedback on your application.
+Thank you for your interest in [*Company] and for applying for the [*Position] position. We have completed our review of the applications and have made our selection for the role. While we were impressed with your qualifications and experience, we have decided to move forward with another candidate who we feel is the best fit for this particular opportunity. We appreciate the time and effort you invested in the application process, and we encourage you to continue to apply for future openings that may be a better fit for your skills and experience.
+--------------
+Closing:
+Thank you again for your interest in our company. We wish you the best of luck in your career endeavors.
+Wishing you the best of luck on your job search.
+Thank you again for considering us as a potential employer, and we wish you the best of luck in your job search.
+Again, thank you for your interest in a position with [*Company], we wish you success in your job search and future career.
+We appreciate your time and interest in [*Company].
+Thanks again for your interest and wish you the best in your career!
+We wish you luck in your search.
+Thank you again for your interest in [*Company]. We wish you the best of luck in your job search.
+Thank you again for considering [*Company] as a potential employer.
+--------------
+Finally:
+Sincerely, [*Company]
+Sincerely, [*Company] Talent team
+Sincerely, [*Company] Talent Acquisition Team
+Sincerely, [*Recruiter] Recruiter | Careers @ [*Company]
+Sincerely, [*Recruiter] Recruiter at [*Company]
+Sincerely, [*Recruiter], [*Company]
+Regards, [*Company]
+Regards, [*Company] Talent team
+Regards, [*Company] Talent Acquisition Team
+Regards, [*Recruiter] Recruiter | Careers @ [*Company]
+Regards, [*Recruiter] Recruiter at [*Company]
+Regards, [*Recruiter], [*Company]
+Kind regards, [*Company]
+Kind regards, [*Company] Talent team
+Kind regards, [*Company] Talent Acquisition Team
+Kind regards, [*Recruiter] Recruiter | Careers @ [*Company]
+Kind regards, [*Recruiter] Recruiter at [*Company]
+Kind regards, [*Recruiter], [*Company]
+Best regards, [*Company]
+Best regards, [*Company] Talent team
+Best regards, [*Company] Talent Acquisition Team
+Best regards, [*Recruiter] Recruiter | Careers @ [*Company]
+Best regards, [*Recruiter] Recruiter at [*Company]
+Best regards, [*Recruiter], [*Company]
+Best, [*Company]
+Best, [*Company] Talent team
+Best, [*Company] Talent Acquisition Team
+Best, [*Recruiter] Recruiter | Careers @ [*Company]
+Best, [*Recruiter] Recruiter at [*Company]
+Best, [*Recruiter], [*Company]

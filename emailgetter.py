@@ -1,9 +1,9 @@
 import imaplib
-import email
 from email.header import decode_header, make_header
 import csv
 from bs4 import BeautifulSoup
 import re
+from fast_mail_parser import parse_email, ParseError
 
 def getTextFromHTML(html):
     soup = BeautifulSoup(html, features="html.parser")
@@ -16,25 +16,21 @@ def getTextFromHTML(html):
     # break multi-headlines into a line each
     chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
     # drop blank lines
-    text = '\n'.join(chunk for chunk in chunks if chunk)
+    text = " ".join(chunk for chunk in chunks if chunk)
     return text
 
-def cleanText(text, isHTML=False):
+def cleanText(text):
+    text = str(make_header(decode_header(text)))
     # remove whitespace
     text = " ".join(text.split())
-    # convert HTML to plain text
-    if isHTML:
-        text = getTextFromHTML(text)
     # remove links
-    nolinks = re.sub(r'http\S+', '', text)
+    text = re.sub(r'http\S+', '', text)
+    # convert HTML to plain text
+    text = getTextFromHTML(text)
     # remove characters to prevent cell overflow
-    return nolinks[:32760]
-
-def hasEmptyParameters(email):
-    try:
-        return email["subject"] == "" or email["to"] == "" or email["from"] == "" or email["date"] == "" or email["subject"] == None or email["to"] == None or email["from"] == None or email["date"] == None
-    except:
-        return False
+    if len(text) > 32000:
+        return text[:32000]
+    return text
 
 def getEmails(user, password, imap_url):
     mail = imaplib.IMAP4_SSL(imap_url)
@@ -48,40 +44,44 @@ def getEmails(user, password, imap_url):
     for num in selected_mails:
         _, data = mail.fetch(num , '(RFC822)')
         _, bytes_data = data[0]
-        email_message = email.message_from_bytes(bytes_data)
-        if hasEmptyParameters(email_message) or user in email_message["from"]:
-            continue
-        subject = str(make_header(decode_header(email_message["subject"])))
-        to = str(make_header(decode_header(email_message["to"])))
-        sender = str(make_header(decode_header(email_message["from"])))
-        date = str(make_header(decode_header(email_message["date"])))
-        data = {}
-        data["subject"] = cleanText(subject)
-        data["to"] = cleanText(to)
-        data["from"] = cleanText(sender)
-        data["date"] = cleanText(date)
-        data["body"] = ""
-        for part in email_message.walk():
-            if part.get_content_type()=="text/plain" or part.get_content_type()=="text/html":
-                message = part.get_payload(decode=True)
-                # decode using correct charset
-                try:
-                    text = message.decode('utf-8', 'ignore')
-                except:
-                    text = message.decode("cp1252", 'ignore')
-                data["body"] = cleanText(text, part.get_content_type()=="text/html")
+        try:
+            emaildata = parse_email(bytes_data)
+        except ParseError as e:
+            print("Failed to parse email: ", e)
+        
+        sender = ""
+        for key, value in emaildata.headers.items():
+            if key.lower() == "from":
+                sender = value
                 break
-        if data["body"] == "" or data["body"] == None:
+
+        data = {
+            "subject": cleanText(emaildata.subject),
+            "from": sender,
+            "date": emaildata.date,
+            "body": "",
+            "status": "",
+            "company": "",
+        }
+        if len(emaildata.text_plain) == 0 and len(emaildata.text_html) == 0:
             continue
-        data["status"] = ""
-        data["company"] = ""
+        elif len(emaildata.text_plain) == 0:
+            data["body"] = cleanText(emaildata.text_html[0])
+            if not data["body"]:
+                data["body"] = cleanText(emaildata.text_plain[0])
+        else:
+            data["body"] = cleanText(emaildata.text_plain[0])
+            if not data["body"]:
+                data["body"] = cleanText(emaildata.text_html[0])
+        if user in data["from"] or not (data["subject"] and data["from"] and data["date"] and data["body"]):
+            continue
         emails.append(data)
 
     return emails
 
 def createCSVDataset(filename, emails):
     with open(filename, 'w', encoding='UTF8') as f:
-        header = ['subject', 'to', 'from', 'date', 'body', "status", "company"]
+        header = ['subject', 'from', 'date', 'body', "status", "company"]
         writer = csv.writer(f)
         writer.writerow(header)
         for emaildata in emails:
