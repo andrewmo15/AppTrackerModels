@@ -89,7 +89,7 @@ def generate_emails(companies, names, positions, subjects, prompts, emailtype):
         if sender == "+autoreply@talent.icims.com":
             sender = company + " <" + companyfix + sender + ">"
         elif sender == "no-reply@":
-            sender = company + " <" + companyfix + ".com>"
+            sender = company + " <" + sender + companyfix + ".com>"
         elif sender == "companyemail": 
             sender = recruitername + " <" + name + "@" + companyfix + ".com>"
         elif sender == "@myworkday.com":
