@@ -8,8 +8,7 @@ import torch.nn as nn
 from torch.nn.utils.rnn import pad_sequence
 import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
-from transformers import DistilBertModel, DistilBertConfig, DistilBertTokenizer, get_linear_schedule_with_warmup
-# from tokenizers.processors import BertProcessing
+from transformers import DistilBertTokenizer, DistilBertForSequenceClassification, get_linear_schedule_with_warmup
 
 # Read in data
 df = pd.read_csv("data generation/data.csv")
@@ -67,15 +66,6 @@ def transformer_collate_fn(batch, tokenizer):
     return sentences, labels, masks
 
 # Model helper functions:
-# Initialize weights for model
-def init_weights(m: nn.Module, hidden_size=768):
-    k = 1 / hidden_size
-    for name, param in m.named_parameters():
-        if 'weight' in name:
-            nn.init.uniform_(param.data, a=-1*k**0.5, b=k**0.5)
-        else:
-            nn.init.uniform_(param.data, 0)
-
 # Convert epoch time to readable form
 def epoch_time(start_time: int, end_time: int):
     elapsed_time = end_time - start_time
@@ -131,37 +121,19 @@ def evaluate_acc(model, dataloader, device):
             total += sentences.size()[0]
     return total_correct / total
 
-# Model creation
-class EmailClassifier(nn.Module):
-    def __init__(self, bert_encoder: nn.Module, enc_hid_dim=768, outputs=2, dropout=0.1):
-        super().__init__()
-        self.bert_encoder = bert_encoder
-        self.enc_hid_dim = enc_hid_dim
-
-    def forward(self, src, mask):
-        bert_output = self.bert_encoder(src, mask)
-        # finish later
-
-def init_classification_head_weights(m: nn.Module, hidden_size=768):
-    # finish later
-    return
-
 #define hyperparameters
 BATCH_SIZE = 10
 LR = 1e-5
-WEIGHT_DECAY = 0
 N_EPOCHS = 3
 CLIP = 1.0
 
 # Define models, move to device, and initialize weights
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-bert_model_name = 'distilbert-base-uncased' 
-configuration = DistilBertConfig()
-bert_encoder = DistilBertModel(configuration)
-tokenizer = DistilBertTokenizer.from_pretrained("data generation/data.csv")
-model = EmailClassifier(bert_encoder).to(device)
-model.apply(init_classification_head_weights)
+bert_model_name = 'distilbert-base-uncased'
+tokenizer = DistilBertTokenizer.from_pretrained(bert_model_name)
+model = DistilBertForSequenceClassification.from_pretrained(bert_model_name)
 model.to(device)
+model.train()
 
 # Create pytorch dataloaders
 train_dataloader = DataLoader(train_dataset,batch_size=BATCH_SIZE,collate_fn=partial(transformer_collate_fn, tokenizer=tokenizer), shuffle = True)
