@@ -1,1 +1,75 @@
-
+Subjects:
+[*Company] Invites you to Complete HackerRank
+[*Company] - OnSite Prep
+[*Company] First Round Interview Availability Request
+[*Company] Interview Availability Request
+[*Company] Invites you to Schedule an Interview
+Invitation - Interview with [*Company] 
+--------------
+Introductions:
+Dear [*Candidate],
+Hello,
+Hi [*Candidate],
+[*Candidate],
+Hi,
+Hello [*Candidate],
+Good afternoon,
+Good afternoon [*Candidate],
+Good morning [*Candidate],
+Good morning,
+Good evening [*Candidate],
+Good evening,
+Thanks [*Candidate],
+--------------
+Body:
+In this interview we will cover a coding question and answer any questions you might have about engineering here at [*Company]! Your interviewer will be [*Recruiter], a member of the engineering team. Coderbyte link: https://coderbyte.com/editor/sharing:13CcaMGm
+Thanks for your commitment to the hiring process so far! I am excited to invite you to our (virtual) onsite interviews - congrats! Our coordinator, Kimia, will be reaching out shortly to get this scheduled. Please let me know if there are any updates to your timeline/job search. After you've scheduled your onsite with Kimia, please use this link to prepare over a quick 15 min phone call with me: In the meantime, here are some materials to help you prepare. 
+Thank you for providing your availability. We will send you a confirmation email shortly.
+You interview with [*Company] is scheduled for [...]. Please use the following Zoom link to join.
+[*Company] invites you to take a HackerRank to see if you are a good fit. Please complete this assessment in a timely manner.
+Thank you for providing your availability! Your next round of interviews is confirmed. Please read below for further instructions and helpful tips for your interviews. We want you to feel completely comfortable and ready for your interview so your recruiter will be in touch shortly with more in depth information on what to expect and how to best prepare. I'm also happy to assist with any questions you may have.
+We'll get a schedule back to you ASAP, by early next week.
+We're excited for you to e-meet the [*Company] team! You will be interviewing with several members of our team. Below is an interview agenda for your reference.
+Thank you for your patience while we’ve worked to schedule your interviews. The team is very excited to meet you. This round of interviews will now only include 3 technical sessions, which I’ve outlined below in your schedule. After you’ve wrapped up these interviews, the team will follow up within 2 business days. Our next round would be a hiring manager interview (behavioral). If you have any questions in the meantime, or deadlines and time constraints we should be aware of, please let us know!
+I wanted to reach out and thank you for your continued interest in [*Company]. We appreciate the time you have already taken to complete the necessary steps in our application and interview process. You are still in consideration for the role(s) you have applied for, but I’d like to ask for your patience as we work through the large volume of applicants we’ve received and finalizing our hiring plans for next year. In the meantime, please follow us on Instagram and LinkedIn and we will be in touch again as soon as possible. Should anything change for you in your search, please feel free to update me on your applicant status. 
+We appreciate you taking the time to speak with us, and we’re excited to move you forward in the interview process! This will present an opportunity for you to learn more in-depth information about the role and meet other members of the team. We’ve lined up colleagues with a variety of backgrounds to help give you the most extensive view on what it’s like to be at [*Company]! This next round of interviews will be conducted over video conference. Your recruiter will be in touch with more information on what to expect for the interviews and how to best prepare for them.
+We are so excited for you to continue on with the process! I’ve scheduled your interview for:
+--------------
+Closing:
+We look forward to speaking with you soon.
+We look forward to reviewing your results.
+We will be in touch with the results soon.
+We look forward to hearing from you.
+Best of luck.
+--------------
+Finally:
+Sincerely, [*Company]
+Sincerely, [*Company] Talent team
+Sincerely, [*Company] Talent Acquisition Team
+Sincerely, [*Recruiter] Recruiter | Careers @ [*Company]
+Sincerely, [*Recruiter] Recruiter at [*Company]
+Sincerely, [*Recruiter], [*Company]
+Regards, [*Company]
+Regards, [*Company] Talent team
+Regards, [*Company] Talent Acquisition Team
+Regards, [*Recruiter] Recruiter | Careers @ [*Company]
+Regards, [*Recruiter] Recruiter at [*Company]
+Regards, [*Recruiter], [*Company]
+Kind regards, [*Company]
+Kind regards, [*Company] Talent team
+Kind regards, [*Company] Talent Acquisition Team
+Kind regards, [*Recruiter] Recruiter | Careers @ [*Company]
+Kind regards, [*Recruiter] Recruiter at [*Company]
+Kind regards, [*Recruiter], [*Company]
+Best regards, [*Company]
+Best regards, [*Company] Talent team
+Best regards, [*Company] Talent Acquisition Team
+Best regards, [*Recruiter] Recruiter | Careers @ [*Company]
+Best regards, [*Recruiter] Recruiter at [*Company]
+Best regards, [*Recruiter], [*Company]
+Best, [*Company]
+Best, [*Company] Talent team
+Best, [*Company] Talent Acquisition Team
+Best, [*Recruiter] Recruiter | Careers @ [*Company]
+Best, [*Recruiter] Recruiter at [*Company]
+Best, [*Recruiter], [*Company]
