@@ -8,6 +8,9 @@
 5. Create frontend using react native
 6. Use RESTAPI for endpoints
 
+## Frontend Repo:
+https://github.com/Alik-da-Geek/AppTrackerFrontend/tree/main
+
 ## Model
 1. Create a Linear SVM model for multiclass text classification of status column
 - Kaggle article explaims SVM well
