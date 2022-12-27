@@ -1,2 +1,2 @@
-data-generation/data.csv filter=lfs diff=lfs merge=lfs -text
 *.csv filter=lfs diff=lfs merge=lfs -text
+data-generation/data.csv filter=lfs diff=lfs merge=lfs -text
