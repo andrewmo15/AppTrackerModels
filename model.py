@@ -8,10 +8,10 @@ import torch.nn as nn
 from torch.nn.utils.rnn import pad_sequence
 import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
-from transformers import DistilBertTokenizer, DistilBertForSequenceClassification, get_linear_schedule_with_warmup
+from transformers import DistilBertModel, DistilBertTokenizer, get_linear_schedule_with_warmup
 
 # Read in data
-df = pd.read_csv("data generation/data.csv")
+df = pd.read_csv("/data generation/data.csv")
 
 # Create text column of combined data
 df["email"] = df["from"] + " " + df["subject"] + " " + df["body"]
@@ -19,6 +19,12 @@ df["email"] = df["from"] + " " + df["subject"] + " " + df["body"]
 # Drop irrelevant features
 irrelevant_features = ["company", "from", "subject", "body"]
 df.drop(irrelevant_features, inplace=True,axis=1)
+
+# Replace values in status column to a numerical representation
+#   SUBMITTED = 0
+#   REJECTED = 1
+#   IRRELEVANT = 2
+df['status'] = df['status'].replace(['SUBMITTED', 'REJECTED', 'IRRELEVANT'], [0, 1, 2])
 
 # Divide data into train, validation, and test datasets
 train_ratio = 0.75
@@ -32,7 +38,7 @@ train_data.insert(1, 'status', y_train, True)
 test_data.insert(1, 'status', y_test, True)
 val_data.insert(1, 'status', y_val, True)
 
-# Defining torch dataset class for disaster tweet dataset
+# Defining torch dataset class for email dataset
 class EmailDataset(Dataset):
     def __init__(self, df):
         self.df = df
@@ -42,7 +48,7 @@ class EmailDataset(Dataset):
 
     def __getitem__(self, idx):
         return self.df.iloc[idx]
-
+  
 # Set up train, validation, and testing datasets
 train_dataset = EmailDataset(train_data)
 val_dataset = EmailDataset(val_data)
@@ -65,19 +71,14 @@ def transformer_collate_fn(batch, tokenizer):
     masks = pad_sequence(masks, batch_first=True, padding_value=0.0)
     return sentences, labels, masks
 
-# Model helper functions:
-# Convert epoch time to readable form
+# Computes the amount of time that a training epoch took and displays it in human readable form
 def epoch_time(start_time: int, end_time: int):
     elapsed_time = end_time - start_time
     elapsed_mins = int(elapsed_time / 60)
     elapsed_secs = int(elapsed_time - (elapsed_mins * 60))
     return elapsed_mins, elapsed_secs
 
-# Count the number of trainable parameters in the model
-def count_parameters(model: nn.Module):
-    return sum(p.numel() for p in model.parameters() if p.requires_grad)
-
-# Train a given model, using a pytorch dataloader, optimizer, and scheduler
+# Train a given model, using a pytorch dataloader, optimizer, and scheduler (if provided)
 def train(model, dataloader, optimizer, device, clip: float, scheduler = None):
     model.train()
     epoch_loss = 0
@@ -94,7 +95,7 @@ def train(model, dataloader, optimizer, device, clip: float, scheduler = None):
         epoch_loss += loss.item()
     return epoch_loss / len(dataloader)
 
-# Calculate epoch loss from the model on dataloader
+# Calculate the loss from the model on the provided dataloader
 def evaluate(model, dataloader, device):
     model.eval()
     epoch_loss = 0
@@ -106,44 +107,59 @@ def evaluate(model, dataloader, device):
             epoch_loss += loss.item()
     return epoch_loss / len(dataloader)
 
-# Calculate prediction accuracy on dataloader
+# Calculate the prediction accuracy on the provided dataloader
 def evaluate_acc(model, dataloader, device):
     model.eval()
     with torch.no_grad():
-        total_correct = 0
-        total = 0
-        for _, batch in enumerate(dataloader):
-            sentences, labels, masks = batch[0], batch[1], batch[2]
-            output = model(sentences.to(device), masks.to(device))
-            output = F.softmax(output, dim=1)
-            output_class = torch.argmax(output, dim=1)
-            total_correct += torch.sum(torch.where(output_class == labels.to(device), 1, 0))
-            total += sentences.size()[0]
+      total_correct = 0
+      total = 0
+      for _, batch in enumerate(dataloader):
+          sentences, labels, masks = batch[0], batch[1], batch[2]
+          output = model(sentences.to(device), masks.to(device))
+          output = F.softmax(output, dim=1)
+          output_class = torch.argmax(output, dim=1)
+          total_correct += torch.sum(torch.where(output_class == labels.to(device), 1, 0))
+          total += sentences.size()[0]
     return total_correct / total
 
-#define hyperparameters
-BATCH_SIZE = 10
+# Load pretrained Distil BERT model and tokenizer and add to custom classification head
+bert_model_name = 'distilbert-base-uncased'
+bert_model = DistilBertModel.from_pretrained(bert_model_name)
+tokenizer = DistilBertTokenizer.from_pretrained(bert_model_name)
+
+class EmailClassifier(nn.Module):
+    def __init__(self, bert_encoder: nn.Module, enc_hid_dim=768, outputs=3, dropout=0.1):
+        super().__init__()
+        self.bert_encoder = bert_encoder
+        self.classifier = nn.Linear(self.bert_encoder.config.hidden_size, outputs)
+        self.dropout = nn.Dropout(dropout)
+
+    def forward(self, src, mask):
+        bert_output = self.bert_encoder(src[:, :512], mask[:, :512])
+        last_hidden_layer = bert_output[0][:,-1,:]
+        last_hidden_layer = self.dropout(last_hidden_layer)
+        logits = self.classifier(last_hidden_layer)
+        return logits
+
+# Define models and devices
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+model = EmailClassifier(bert_model).to(device)
+model.to(device)
+
+# Define hyperparameters
+BATCH_SIZE = 32
 LR = 1e-5
 N_EPOCHS = 3
 CLIP = 1.0
 
-# Define models, move to device, and initialize weights
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-bert_model_name = 'distilbert-base-uncased'
-tokenizer = DistilBertTokenizer.from_pretrained(bert_model_name)
-model = DistilBertForSequenceClassification.from_pretrained(bert_model_name)
-model.to(device)
-model.train()
-
-# Create pytorch dataloaders
+# Create pytorch dataloaders from train_dataset, val_dataset, and test_datset
 train_dataloader = DataLoader(train_dataset,batch_size=BATCH_SIZE,collate_fn=partial(transformer_collate_fn, tokenizer=tokenizer), shuffle = True)
 val_dataloader = DataLoader(val_dataset,batch_size=BATCH_SIZE,collate_fn=partial(transformer_collate_fn, tokenizer=tokenizer))
 test_dataloader = DataLoader(test_dataset,batch_size=BATCH_SIZE,collate_fn=partial(transformer_collate_fn, tokenizer=tokenizer))
 
-# Train model
+# Train and evaluate model
 optimizer = optim.Adam(model.parameters(), lr=LR)
 scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=10, num_training_steps=N_EPOCHS*len(train_dataloader))
-print(f'The model has {count_parameters(model):,} trainable parameters')
 train_loss = evaluate(model, train_dataloader, device)
 train_acc = evaluate_acc(model, train_dataloader, device)
 valid_loss = evaluate(model, val_dataloader, device)
@@ -161,13 +177,13 @@ for epoch in range(N_EPOCHS):
     valid_loss = evaluate(model, val_dataloader, device)
     valid_acc = evaluate_acc(model, val_dataloader, device)
     epoch_mins, epoch_secs = epoch_time(start_time, end_time)
-
     print(f'Epoch: {epoch+1:02} | Time: {epoch_mins}m {epoch_secs}s')
     print(f'\tTrain Loss: {train_loss:.3f}')
     print(f'\tTrain Acc: {train_acc:.3f}')
     print(f'\tValid Loss: {valid_loss:.3f}')
     print(f'\tValid Acc: {valid_acc:.3f}')
 
+# Test model and get accuracy
 test_loss = evaluate(model, test_dataloader, device)
 test_acc = evaluate_acc(model, test_dataloader, device)
 print(f'Test Loss: {test_loss:.3f}')
