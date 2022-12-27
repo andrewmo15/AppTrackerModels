@@ -43,6 +43,7 @@ def getEmails(user, password, imap_url):
     emails = []
     for num in selected_mails:
         _, data = mail.fetch(num , '(RFC822)')
+        # print(data)
         _, bytes_data = data[0]
         try:
             emaildata = parse_email(bytes_data)
@@ -68,7 +69,11 @@ def getEmails(user, password, imap_url):
         elif len(emaildata.text_plain) == 0:
             data["body"] = cleanText(emaildata.text_html[0])
             if not data["body"]:
-                data["body"] = cleanText(emaildata.text_plain[0])
+                continue
+        elif len(emaildata.text_html) == 0:
+            data["body"] = cleanText(emaildata.text_plain[0])
+            if not data["body"]:
+                continue
         else:
             data["body"] = cleanText(emaildata.text_plain[0])
             if not data["body"]:
@@ -92,8 +97,11 @@ def createCSVDataset(filename, emails):
 
 # user = 'aliksemelianov@gmail.com'
 # password = 'xqjybjodcaqktkcl'
-user = 'andrewmoasdf@gmail.com'
-password = 'rwkixnairelyitli'
+user = 'barnette@gmail.com'
+password = 'cjaszgvtufajizyh'
+# user = 'nathan.barnette@me.com'
+# password = 'dpis-wdyt-ltpi-rqjn'
 imap_url = 'imap.gmail.com'
+# imap_url = 'imap.mail.me.com'
 emails = getEmails(user, password, imap_url)
 createCSVDataset("emails.csv", emails)
