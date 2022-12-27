@@ -11,7 +11,7 @@ from torch.utils.data import Dataset, DataLoader
 from transformers import DistilBertModel, DistilBertTokenizer, get_linear_schedule_with_warmup
 
 # Read in data
-df = pd.read_csv("/data generation/data.csv")
+df = pd.read_csv("../data generation/data.csv")
 
 # Create text column of combined data
 df["email"] = df["from"] + " " + df["subject"] + " " + df["body"]
@@ -111,15 +111,15 @@ def evaluate(model, dataloader, device):
 def evaluate_acc(model, dataloader, device):
     model.eval()
     with torch.no_grad():
-      total_correct = 0
-      total = 0
-      for _, batch in enumerate(dataloader):
-          sentences, labels, masks = batch[0], batch[1], batch[2]
-          output = model(sentences.to(device), masks.to(device))
-          output = F.softmax(output, dim=1)
-          output_class = torch.argmax(output, dim=1)
-          total_correct += torch.sum(torch.where(output_class == labels.to(device), 1, 0))
-          total += sentences.size()[0]
+        total_correct = 0
+        total = 0
+        for _, batch in enumerate(dataloader):
+            sentences, labels, masks = batch[0], batch[1], batch[2]
+            output = model(sentences.to(device), masks.to(device))
+            output = F.softmax(output, dim=1)
+            output_class = torch.argmax(output, dim=1)
+            total_correct += torch.sum(torch.where(output_class == labels.to(device), 1, 0))
+            total += sentences.size()[0]
     return total_correct / total
 
 # Load pretrained Distil BERT model and tokenizer and add to custom classification head
@@ -143,7 +143,7 @@ class EmailClassifier(nn.Module):
 
 # Define models and devices
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-model = EmailClassifier(bert_model).to(device)
+model = EmailClassifier(bert_model)
 model.to(device)
 
 # Define hyperparameters
