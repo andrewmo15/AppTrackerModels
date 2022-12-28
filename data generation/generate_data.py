@@ -6,7 +6,6 @@ namesfile = open(file="datasets/names.txt", mode="r")
 positionsfile = open(file="datasets/positions.txt", mode="r")
 rejectionsfile = open(file="prompts/rejection_prompts.txt", mode="r")
 submissionsfile = open(file="prompts/submission_prompts.txt", mode="r")
-data_size = 30000
 
 companies = companyfile.read().split("\n")
 names = namesfile.read().split("\n")
@@ -31,7 +30,7 @@ submission_final = submission_prompts[6].split("\n")[1:-1]
 
 senderemails = ["no-reply@us.greenhouse-mail.io", "+autoreply@talent.icims.com", "no-reply@", "companyemail", "no-reply@hire.lever.co", "@myworkday.com"]
 
-def generate_emails(companies, names, positions, subjects, prompts, emailtype):
+def generate_emails(companies, names, positions, subjects, prompts, emailtype, data_size):
     rows = []
     prompts_copy = [prompt.copy() for prompt in prompts]
     companies_copy = companies.copy()
@@ -111,11 +110,11 @@ with open("data.csv", 'w', encoding='UTF8') as f:
     writer = csv.writer(f)
     writer.writerow(header)
     reject_prompts = [rejection_intros, rejection_bodies, rejection_closing, rejection_final]
-    rows = generate_emails(companies, names, positions, rejection_subjects, reject_prompts, "REJECTED")
+    rows = generate_emails(companies, names, positions, rejection_subjects, reject_prompts, "REJECTED", 3000)
     for row in rows:
         writer.writerow(row)
     submit_prompts = [submission_optional_start, submission_intros, submission_stuffer, submission_bodies, submission_closing, submission_final]
-    rows = generate_emails(companies, names, positions, submission_subjects, submit_prompts, "SUBMITTED")
+    rows = generate_emails(companies, names, positions, submission_subjects, submit_prompts, "SUBMITTED", 3000)
     for row in rows:
         writer.writerow(row)
     

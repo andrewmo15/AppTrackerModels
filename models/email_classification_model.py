@@ -8,7 +8,8 @@ import torch.nn as nn
 from torch.nn.utils.rnn import pad_sequence
 import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
-from transformers import DistilBertModel, DistilBertTokenizer, get_linear_schedule_with_warmup
+from transformers import DistilBertModel, DistilBertTokenizer, logging, get_linear_schedule_with_warmup
+logging.set_verbosity_error()
 
 # Read in data
 df = pd.read_csv("../data generation/data.csv")
@@ -60,7 +61,7 @@ def transformer_collate_fn(batch, tokenizer):
     bert_pad_token = bert_vocab['[PAD]']
     sentences, labels, masks = [], [], []
     for data in batch:
-        tokenizer_output = tokenizer([data['email']])
+        tokenizer_output = tokenizer([data['email']], truncation=True, max_length=512)
         tokenized_sent = tokenizer_output['input_ids'][0]
         mask = tokenizer_output['attention_mask'][0]
         sentences.append(torch.tensor(tokenized_sent))
@@ -82,8 +83,7 @@ def epoch_time(start_time: int, end_time: int):
 def train(model, dataloader, optimizer, device, clip: float, scheduler = None):
     model.train()
     epoch_loss = 0
-    for batch in dataloader:
-        sentences, labels, masks = batch[0], batch[1], batch[2]
+    for sentences, labels, masks in dataloader:
         optimizer.zero_grad()
         output = model(sentences.to(device), masks.to(device))
         loss = F.cross_entropy(output, labels.to(device))
@@ -100,8 +100,7 @@ def evaluate(model, dataloader, device):
     model.eval()
     epoch_loss = 0
     with torch.no_grad():
-        for batch in dataloader:
-            sentences, labels, masks = batch[0], batch[1], batch[2]
+        for sentences, labels, masks in dataloader:
             output = model(sentences.to(device), masks.to(device))
             loss = F.cross_entropy(output, labels.to(device))
             epoch_loss += loss.item()
@@ -113,8 +112,7 @@ def evaluate_acc(model, dataloader, device):
     with torch.no_grad():
         total_correct = 0
         total = 0
-        for _, batch in enumerate(dataloader):
-            sentences, labels, masks = batch[0], batch[1], batch[2]
+        for _, (sentences, labels, masks) in enumerate(dataloader):
             output = model(sentences.to(device), masks.to(device))
             output = F.softmax(output, dim=1)
             output_class = torch.argmax(output, dim=1)
@@ -135,7 +133,7 @@ class EmailClassifier(nn.Module):
         self.dropout = nn.Dropout(dropout)
 
     def forward(self, src, mask):
-        bert_output = self.bert_encoder(src[:, :512], mask[:, :512])
+        bert_output = self.bert_encoder(src, mask)
         last_hidden_layer = bert_output[0][:,-1,:]
         last_hidden_layer = self.dropout(last_hidden_layer)
         logits = self.classifier(last_hidden_layer)
