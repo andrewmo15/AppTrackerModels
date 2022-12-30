@@ -110,11 +110,11 @@ with open("data.csv", 'w', encoding='UTF8') as f:
     writer = csv.writer(f)
     writer.writerow(header)
     reject_prompts = [rejection_intros, rejection_bodies, rejection_closing, rejection_final]
-    rows = generate_emails(companies, names, positions, rejection_subjects, reject_prompts, "REJECTED", 3000)
+    rows = generate_emails(companies, names, positions, rejection_subjects, reject_prompts, "REJECTED", 10000)
     for row in rows:
         writer.writerow(row)
     submit_prompts = [submission_optional_start, submission_intros, submission_stuffer, submission_bodies, submission_closing, submission_final]
-    rows = generate_emails(companies, names, positions, submission_subjects, submit_prompts, "SUBMITTED", 3000)
+    rows = generate_emails(companies, names, positions, submission_subjects, submit_prompts, "SUBMITTED", 10000)
     for row in rows:
         writer.writerow(row)
     

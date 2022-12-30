@@ -1,4 +1,5 @@
 import time
+import re
 from functools import partial
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -8,14 +9,17 @@ import torch.nn as nn
 from torch.nn.utils.rnn import pad_sequence
 import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
-from transformers import DistilBertModel, DistilBertTokenizer, logging, get_linear_schedule_with_warmup
+import transformers
+from transformers import DistilBertModel, DistilBertTokenizer, logging
 logging.set_verbosity_error()
 
 # Read in data
-df = pd.read_csv("../data generation/data.csv")
+df = pd.read_csv("/content/traindata.csv")
 
-# Create text column of combined data
+# Create text column of combined data and remove all non alphanumeric characters
+df.dropna()
 df["email"] = df["from"] + " " + df["subject"] + " " + df["body"]
+df['email'] = df["email"].apply(lambda text: re.sub(r'[^A-Za-z0-9 ]+', '', text))
 
 # Drop irrelevant features
 irrelevant_features = ["company", "from", "subject", "body"]
@@ -157,7 +161,7 @@ test_dataloader = DataLoader(test_dataset,batch_size=BATCH_SIZE,collate_fn=parti
 
 # Train and evaluate model
 optimizer = optim.Adam(model.parameters(), lr=LR)
-scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=10, num_training_steps=N_EPOCHS*len(train_dataloader))
+scheduler = transformers.get_linear_schedule_with_warmup(optimizer, num_warmup_steps=10, num_training_steps=N_EPOCHS*len(train_dataloader))
 train_loss = evaluate(model, train_dataloader, device)
 train_acc = evaluate_acc(model, train_dataloader, device)
 valid_loss = evaluate(model, val_dataloader, device)
@@ -186,3 +190,10 @@ test_loss = evaluate(model, test_dataloader, device)
 test_acc = evaluate_acc(model, test_dataloader, device)
 print(f'Test Loss: {test_loss:.3f}')
 print(f'Test Acc: {test_acc:.3f}')
+
+# Saving model into checkpoint.pth file
+checkpoint = {'model': model,
+          'state_dict': model.state_dict(),
+          'optimizer' : optimizer.state_dict()}
+
+torch.save(checkpoint, 'checkpoint.pth')
