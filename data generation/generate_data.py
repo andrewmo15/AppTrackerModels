@@ -100,21 +100,20 @@ def generate_emails(companies, names, positions, subjects, prompts, emailtype, d
         del subjects_copy[subjectidx]
         for i, idx in enumerate(promptsidx):
             del prompts_copy[i][idx]
-
-        row = [subject, sender, email, emailtype, company]
+        row = [subject, sender, email, emailtype, company, job]
         rows.append(row)
     return rows
 
 with open("data.csv", 'w', encoding='UTF8') as f:
-    header = ['subject', 'from', 'body', "status", "company"]
+    header = ['subject', 'from', 'body', "status", "company", "position"]
     writer = csv.writer(f)
     writer.writerow(header)
     reject_prompts = [rejection_intros, rejection_bodies, rejection_closing, rejection_final]
-    rows = generate_emails(companies, names, positions, rejection_subjects, reject_prompts, "REJECTED", 10000)
+    rows = generate_emails(companies, names, positions, rejection_subjects, reject_prompts, "REJECTED", 20000)
     for row in rows:
         writer.writerow(row)
     submit_prompts = [submission_optional_start, submission_intros, submission_stuffer, submission_bodies, submission_closing, submission_final]
-    rows = generate_emails(companies, names, positions, submission_subjects, submit_prompts, "SUBMITTED", 10000)
+    rows = generate_emails(companies, names, positions, submission_subjects, submit_prompts, "SUBMITTED", 20000)
     for row in rows:
         writer.writerow(row)
     
