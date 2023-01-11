@@ -2,52 +2,10 @@ import re
 from functools import partial
 import pandas as pd
 import torch
-import torch.nn as nn
-from torch.nn.utils.rnn import pad_sequence
 import torch.nn.functional as F
-from torch.utils.data import Dataset, DataLoader
-from transformers import DistilBertTokenizer
-
-class EmailDataset(Dataset):
-    def __init__(self, df):
-        self.df = df
-
-    def __len__(self):
-        return len(self.df)
-
-    def __getitem__(self, idx):
-        return self.df.iloc[idx]
-
-class EmailClassifier(nn.Module):
-    def __init__(self, bert_encoder: nn.Module, enc_hid_dim=768, outputs=3, dropout=0.1):
-        super().__init__()
-        self.bert_encoder = bert_encoder
-        self.classifier = nn.Linear(self.bert_encoder.config.hidden_size, outputs)
-        self.dropout = nn.Dropout(dropout)
-
-    def forward(self, src, mask):
-        bert_output = self.bert_encoder(src, mask)
-        last_hidden_layer = bert_output[0][:,-1,:]
-        last_hidden_layer = self.dropout(last_hidden_layer)
-        logits = self.classifier(last_hidden_layer)
-        return logits
-    
-# Create collate function for email dataset that will tokenize the input emails for use with our BERT models.
-def transformer_collate_fn(batch, tokenizer):
-    bert_vocab = tokenizer.get_vocab()
-    bert_pad_token = bert_vocab['[PAD]']
-    sentences, labels, masks = [], [], []
-    for data in batch:
-        tokenizer_output = tokenizer([data['email']], truncation=True, max_length=512)
-        tokenized_sent = tokenizer_output['input_ids'][0]
-        mask = tokenizer_output['attention_mask'][0]
-        sentences.append(torch.tensor(tokenized_sent))
-        labels.append(torch.tensor(data['status']))
-        masks.append(torch.tensor(mask))
-    sentences = pad_sequence(sentences, batch_first=True, padding_value=bert_pad_token)
-    labels = torch.stack(labels, dim=0)
-    masks = pad_sequence(masks, batch_first=True, padding_value=0.0)
-    return sentences, labels, masks
+from torch.utils.data import DataLoader
+from transformers import DistilBertTokenizer, DistilBertModel
+from model_utils import EmailDataset, EmailClassifier, transformer_collate_fn
 
 def load_checkpoint(filepath):
     checkpoint = torch.load(filepath)
@@ -66,7 +24,7 @@ def getPrediction(email, model, device):
     email_dataloader = DataLoader(email_dataset,batch_size=1,collate_fn=partial(transformer_collate_fn, tokenizer=tokenizer))
     prediction = 0
     with torch.no_grad():
-        for sentences, labels, masks in email_dataloader:
+        for sentences, _, masks in email_dataloader:
             output = model(sentences.to(device), masks.to(device))
             output = F.softmax(output, dim=1)
             prediction = torch.argmax(output, dim=1)
@@ -80,9 +38,17 @@ def getPrediction(email, model, device):
 def cleanText(text):
     return re.sub(r'[^A-Za-z0-9 ]+', '', text)
 
-model = load_checkpoint('/kaggle/input/email-model-checkpoint/checkpoint.pth')
-tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased')
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+bert_model_name = 'distilbert-base-uncased'
+tokenizer = DistilBertTokenizer.from_pretrained(bert_model_name)
+if torch.cuda.is_available():
+    model = load_checkpoint('classifier_checkpoint.pth')
+    device = torch.device('cuda')
+else:
+    bert_model = DistilBertModel.from_pretrained(bert_model_name)
+    model = EmailClassifier(bert_model)
+    checkpoint = torch.load('classifier_checkpoint.pth', map_location=torch.device('cpu'))
+    model.load_state_dict(checkpoint['state_dict'])
+    device = torch.device('cpu')
 
 email = """Thank you for applying to Neuralink Hi Test, Thanks for applying to Neuralink. 
 Your application has been received and we will review it right away. 

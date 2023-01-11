@@ -12,9 +12,9 @@ Backend: https://github.com/Alik-da-Geek/ApplicationTrackerBackend
 
 ## To do:
 1. Gather data and create datasets ✅
-2. Train and fine-tune DistilBert model ✅
-3. Create NER model from pre-existing libraries
-4. Change model device to be cpu instead of CUDA
+2. Train and fine-tune DistilBert model for email classification ✅
+3. Train and fine-tune DistilBert model for name entity recognition ✅
+4. Change model device to be cpu instead of CUDA ✅
 5. Deploy models onto cloud (maybe with GPUs?)
 6. Create INPROGRESS prompts
 7. Train existing model with new datapoints
